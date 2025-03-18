@@ -12,7 +12,7 @@ const Header = () => {
           href={"/"}
           className="flex items-center gap-1 lg:gap-2 shrink-0"
         >
-          <FilePen className="w-5 h-5 lg:w-8 lg:h-8 text-gray-900 group-hover:rotate-12 trans " />
+          <FilePen className="w-5 h-5 lg:w-8 lg:h-8 group-hover:rotate-12 trans text-rose-500" />
           <h1 className="md:text-3xl font-caveat font-bold text-gray-900 hidden md:block">
             SumrEase
           </h1>
