@@ -3,6 +3,7 @@ import { Poppins, Caveat } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/common/header";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "react-hot-toast";
 
 const fontPoppins = Poppins({
   variable: "--font-poppins",
@@ -41,6 +42,7 @@ export default function RootLayout({
             <main className="flex-1">{children}</main>
             {/* <Footer /> */}
           </div>
+          <Toaster />
         </body>
       </html>
     </ClerkProvider>
