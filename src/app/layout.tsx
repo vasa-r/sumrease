@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Poppins, Caveat } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/common/header";
-import Footer from "@/components/common/footer";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const fontPoppins = Poppins({
   variable: "--font-poppins",
@@ -31,16 +31,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${fontPoppins.variable} ${fontCaveat.variable} font-poppins antialiased`}
-      >
-        <div className="min-h-screen flex flex-col relative">
-          <Header />
-          <main className="flex-1">{children}</main>
-          <Footer />
-        </div>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body
+          className={`${fontPoppins.variable} ${fontCaveat.variable} font-poppins antialiased`}
+        >
+          <div className="min-h-screen flex flex-col relative">
+            <Header />
+            <main className="flex-1">{children}</main>
+            {/* <Footer /> */}
+          </div>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
