@@ -1,6 +1,7 @@
 "use server";
 
 import { fetchNExtractPdfTxt } from "@/lib/langchain";
+import { generateSummaryFromOpenAI } from "@/lib/openai";
 
 type UploadRes = {
   serverData: {
@@ -40,6 +41,24 @@ export const generatePdfSummary = async (uploadResponse: UploadRes) => {
 
   try {
     const pdfText = await fetchNExtractPdfTxt(pdfUrl);
+
+    const summary = await generateSummaryFromOpenAI(pdfText);
+
+    console.log(summary);
+
+    if (!summary) {
+      return {
+        success: false,
+        message: "Failed to generate summary",
+        data: null,
+      };
+    }
+
+    return {
+      success: true,
+      message: "Summary generated",
+      data: summary,
+    };
   } catch (error) {
     console.log(error);
     return {

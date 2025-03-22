@@ -45,9 +45,11 @@ const UploadForm = () => {
 
     toast.success("Processing PDF");
 
-    const summary = await generatePdfSummary(res);
+    const summaryResult = await generatePdfSummary(res);
 
-    console.log(summary);
+    const { data = null, message } = summaryResult;
+
+    console.log(result);
   };
   return (
     <div className="flex flex-col gap-8 w-full max-w-2xl mx-auto">
