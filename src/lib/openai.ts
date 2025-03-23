@@ -29,11 +29,10 @@ export const generateSummaryFromOpenAI = async (pdfText: string) => {
 
       if (error.status === 429) {
         console.warn("Rate limit exceeded. Try again later.");
-        throw new Error("Rate limit exceeded");
+        throw new Error("RATE_LIMIT_EXCEEDED");
       }
     } else {
       console.error("Unknown error:", error);
     }
-    return null;
   }
 };
