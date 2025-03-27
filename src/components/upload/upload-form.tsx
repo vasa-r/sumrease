@@ -8,9 +8,11 @@ import toast from "react-hot-toast";
 import { File } from "lucide-react";
 import { generatePdfSummary } from "@/actions/upload-action";
 import { storePdfSummaryAction } from "@/lib/db";
+import { useRouter } from "next/navigation";
 
 const UploadForm = () => {
   const formRef = useRef<HTMLFormElement>(null);
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const { startUpload, routeConfig } = useUploadThing("pdfUploader", {
     onClientUploadComplete: () => {
@@ -60,9 +62,9 @@ const UploadForm = () => {
 
       if (data) {
         toast.success("Summary generated successfully. Now saving it.");
-        formRef.current?.reset();
+        let storeResult;
         if (data.summary) {
-          await storePdfSummaryAction({
+          storeResult = await storePdfSummaryAction({
             fileUrl: res[0].serverData.file.url,
             summary: summaryResult.data.summary,
             title: summaryResult.data.title,
@@ -70,6 +72,7 @@ const UploadForm = () => {
           });
           toast.success("Summary Generated");
           formRef.current?.reset();
+          router.push(`/summaries/${storeResult.data?.id}`);
         }
       }
     } catch (error) {

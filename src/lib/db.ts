@@ -3,6 +3,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { neon } from "@neondatabase/serverless";
 import { AddSummary } from "../../types/type";
+import { revalidatePath } from "next/cache";
 
 export const getDbConnection = async () => {
   if (!process.env.NEON_DB_URI) {
@@ -36,9 +37,9 @@ const savePdfSummaryDB = async ({
       ${summary},
       ${title},
       ${fileName}
-  );`;
+  ) RETURNING *;`;
 
-    return savedSummary;
+    return savedSummary[0];
   } catch (error) {
     console.log("Error saving pdf summary", error);
     throw error;
@@ -69,17 +70,14 @@ export const storePdfSummaryAction = async ({
       fileName,
     });
 
+    console.log({ savePdfSummary });
+
     if (!savePdfSummary) {
       return {
         success: false,
         message: "Failed to save PDF summary",
       };
     }
-
-    return {
-      success: true,
-      message: "Pdf summary saved successfully",
-    };
   } catch (error) {
     console.log(error);
     return {
@@ -88,4 +86,14 @@ export const storePdfSummaryAction = async ({
         error instanceof Error ? error.message : "Error saving pdf summary",
     };
   }
+
+  revalidatePath(`/summaries/${savePdfSummary.id}`);
+
+  return {
+    success: true,
+    message: "Pdf summary saved successfully",
+    data: {
+      id: savePdfSummary.id,
+    },
+  };
 };
