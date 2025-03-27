@@ -3,6 +3,7 @@
 import { generateSummaryFromGemini } from "@/lib/gemini";
 import { fetchNExtractPdfTxt } from "@/lib/langchain";
 import { generateSummaryFromOpenAI } from "@/lib/openai";
+import { formatFileNameAsTitle } from "@/utils/format-utils";
 
 type UploadRes = {
   serverData: {
@@ -69,12 +70,12 @@ export const generatePdfSummary = async (uploadResponse: UploadRes) => {
       };
     }
 
-    console.log({ summary });
+    const fileTitle = formatFileNameAsTitle(fileName);
 
     return {
       success: true,
       message: "Summary generated",
-      data: { summary },
+      data: { title: fileTitle, summary },
     };
   } catch (error) {
     console.log(error);

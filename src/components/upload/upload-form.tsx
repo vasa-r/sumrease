@@ -7,6 +7,7 @@ import { useUploadThing } from "@/utils/uploadthing";
 import toast from "react-hot-toast";
 import { File } from "lucide-react";
 import { generatePdfSummary } from "@/actions/upload-action";
+import { storePdfSummaryAction } from "@/lib/db";
 
 const UploadForm = () => {
   const formRef = useRef<HTMLFormElement>(null);
@@ -51,13 +52,24 @@ const UploadForm = () => {
 
       const summaryResult = await generatePdfSummary(res);
 
+      if (!summaryResult.data) {
+        throw new Error("No summary");
+      }
+
       const { data = null, message = null } = summaryResult;
 
       if (data) {
         toast.success("Summary generated successfully. Now saving it.");
         formRef.current?.reset();
         if (data.summary) {
-          // db
+          await storePdfSummaryAction({
+            fileUrl: res[0].serverData.file.url,
+            summary: summaryResult.data.summary,
+            title: summaryResult.data.title,
+            fileName: file.name,
+          });
+          toast.success("Summary Generated");
+          formRef.current?.reset();
         }
       }
     } catch (error) {

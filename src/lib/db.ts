@@ -24,7 +24,7 @@ const savePdfSummaryDB = async ({
   try {
     const sql = await getDbConnection();
 
-    await sql`INSERT INTO pdf_summaries (
+    const savedSummary = await sql`INSERT INTO pdf_summaries (
       user_id, 
       original_file_url, 
       summary_text, 
@@ -37,6 +37,8 @@ const savePdfSummaryDB = async ({
       ${title},
       ${fileName}
   );`;
+
+    return savedSummary;
   } catch (error) {
     console.log("Error saving pdf summary", error);
     throw error;
@@ -48,7 +50,7 @@ export const storePdfSummaryAction = async ({
   summary,
   title,
   fileName,
-}: AddSummary) => {
+}: Omit<AddSummary, "userId">) => {
   let savePdfSummary;
   try {
     const { userId } = await auth();
