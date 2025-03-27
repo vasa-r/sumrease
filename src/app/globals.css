@@ -176,3 +176,7 @@
 .trans {
   @apply transform transition duration-200 ease-in-out;
 }
+
+::-webkit-scrollbar {
+  display: none;
+}

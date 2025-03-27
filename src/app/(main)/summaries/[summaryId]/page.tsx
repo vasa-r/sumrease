@@ -17,7 +17,14 @@ const IndividualSummary = async (props: ISType) => {
 
   const summary = (await getSummary(summaryId)) as PdfSummary;
 
-  const { title, file_name, word_count, summary_text, created_at } = summary;
+  const {
+    title,
+    file_name,
+    word_count,
+    summary_text,
+    created_at,
+    original_file_url,
+  } = summary;
 
   if (!summary) {
     return notFound();
@@ -34,7 +41,15 @@ const IndividualSummary = async (props: ISType) => {
               word_count={word_count}
             />
           </div>
-          {file_name && <SourceInfo file_name={file_name} />}
+          {file_name && (
+            <SourceInfo
+              file_name={file_name}
+              original_file_url={original_file_url}
+              title={title}
+              summary_text={summary_text}
+              created_at={created_at}
+            />
+          )}
           <div className="relative mt-4 sm:mt-8 lg:mt-16">
             <div className="relative mt-4 sm:mt-6 lg:mt-16">
               <div className="relative p-4 lg:p-8 bg-white/80 backdrop-blur-md rounded-2xl border shadow-xl border-rose-100/30 transition-all hover:shadow-2xl duration-300 hover:bg-white/90 max-w-4xl mx-auto">

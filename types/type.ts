@@ -14,6 +14,7 @@ export interface PdfSummary {
   status: "completed" | "pending" | "failed";
   title: string;
   file_name: string;
+  word_count: number;
   created_at: string;
   updated_at: string;
 }
