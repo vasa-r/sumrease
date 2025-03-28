@@ -70,8 +70,6 @@ export const storePdfSummaryAction = async ({
       fileName,
     });
 
-    console.log({ savePdfSummary });
-
     if (!savePdfSummary) {
       return {
         success: false,

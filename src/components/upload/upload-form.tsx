@@ -5,7 +5,6 @@ import UploadFormInput from "@/components/upload/upload-form-input";
 import { fileSchema } from "@/validation/file-schema";
 import { useUploadThing } from "@/utils/uploadthing";
 import toast from "react-hot-toast";
-import { File } from "lucide-react";
 import { generatePdfSummary } from "@/actions/upload-action";
 import { storePdfSummaryAction } from "@/lib/db";
 import { useRouter } from "next/navigation";
@@ -14,7 +13,7 @@ const UploadForm = () => {
   const formRef = useRef<HTMLFormElement>(null);
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const { startUpload, routeConfig } = useUploadThing("pdfUploader", {
+  const { startUpload } = useUploadThing("pdfUploader", {
     onClientUploadComplete: () => {
       toast.success("Upload Success");
     },
@@ -44,7 +43,7 @@ const UploadForm = () => {
       }
 
       const res = await startUpload([file]);
-      console.log(res);
+
       if (!res) {
         toast.error("Failed to upload");
         return;
@@ -58,7 +57,7 @@ const UploadForm = () => {
         throw new Error("No summary");
       }
 
-      const { data = null, message = null } = summaryResult;
+      const { data = null } = summaryResult;
 
       if (data) {
         toast.success("Summary generated successfully. Now saving it.");
@@ -83,7 +82,7 @@ const UploadForm = () => {
     }
   };
   return (
-    <div className="flex flex-col gap-8 w-full max-w-2xl mx-auto">
+    <div className="flex flex-col w-full max-w-2xl gap-8 mx-auto">
       <UploadFormInput
         loading={isLoading}
         ref={formRef}
