@@ -37,7 +37,7 @@ export default function RootLayout({
         <body
           className={`${fontPoppins.variable} ${fontCaveat.variable} font-poppins antialiased`}
         >
-          <div className="min-h-screen flex flex-col relative">
+          <div className="relative flex flex-col min-h-screen">
             <Header />
             <main className="flex-1">{children}</main>
             {/* <Footer /> */}

@@ -8,7 +8,6 @@ import { formatDate, formatFileName } from "@/utils/format-utils";
 import { PdfSummary } from "../../../types/type";
 
 const SummaryHeader = ({
-  fileUrl,
   title,
   created_at,
 }: {
@@ -18,9 +17,9 @@ const SummaryHeader = ({
 }) => {
   return (
     <div className="flex items-start gap-2 sm:gap-4">
-      <FileText className="w-6 h-6 sm:w-8 sm:h-8 text-rose-400 mt-1" />
+      <FileText className="w-6 h-6 mt-1 sm:w-8 sm:h-8 text-rose-400" />
       <div className="flex-1 min-w-0">
-        <h3 className="text-base xl:text-lg font-semibold text-gray-900 truncate w-4/5">
+        <h3 className="w-4/5 text-base font-semibold text-gray-900 truncate xl:text-lg">
           {formatFileName(title!)}
         </h3>
         <p className="text-sm text-gray-500">{formatDate(created_at)}</p>
@@ -45,7 +44,6 @@ const StatusBadge = ({ status }: { status: string }) => {
 };
 
 const SummaryCard = ({ summary }: { summary: PdfSummary }) => {
-  console.log(summary);
   return (
     <div>
       <Card className="relative h-full">
@@ -60,11 +58,11 @@ const SummaryCard = ({ summary }: { summary: PdfSummary }) => {
               created_at={summary.created_at}
             />
 
-            <p className="text-gary-600 line-clamp-2 text-sm sm:text-base pl-2">
+            <p className="pl-2 text-sm text-gary-600 line-clamp-2 sm:text-base">
               {summary.summary_text}
             </p>
 
-            <div className="flex justify-between items-center mt-2 sm:mt-4">
+            <div className="flex items-center justify-between mt-2 sm:mt-4">
               <StatusBadge status={summary.status} />
             </div>
           </div>

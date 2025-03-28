@@ -62,6 +62,12 @@ const createOrUpdateUser = async ({
       INSERT INTO users (email, full_name, customer_id, price_id, status)
       VALUES (${email}, ${fullName}, ${customerId}, ${priceId}, ${status});
     `;
+    } else {
+      await sql`
+        UPDATE users 
+        SET price_id = ${priceId}, updated_at = CURRENT_TIMESTAMP
+        WHERE email = ${email};
+      `;
     }
   } catch (error) {
     console.log(error);
