@@ -3,37 +3,21 @@
 import { generateSummaryFromGemini } from "@/lib/gemini";
 import { fetchNExtractPdfTxt } from "@/lib/langchain";
 import { generateSummaryFromOpenAI } from "@/lib/openai";
-import { formatFileNameAsTitle } from "@/utils/format-utils";
 
-type UploadRes = {
-  serverData: {
-    userId: string;
-    file: {
-      name: string;
-      size: number;
-      type: string;
-      url: string;
-    };
-  };
-}[];
+// type UploadRes = {
+//   serverData: {
+//     userId: string;
+//     file: {
+//       name: string;
+//       size: number;
+//       type: string;
+//       url: string;
+//     };
+//   };
+// }[];
 
-export const generatePdfSummary = async (uploadResponse: UploadRes) => {
-  if (!uploadResponse) {
-    return {
-      success: false,
-      message: "File upload failed",
-      data: null,
-    };
-  }
-
-  const {
-    serverData: {
-      userId,
-      file: { name: fileName, url: pdfUrl },
-    },
-  } = uploadResponse[0];
-
-  if (!pdfUrl || !fileName) {
+export const generatePdfText = async ({ fileUrl }: { fileUrl: string }) => {
+  if (!fileUrl) {
     return {
       success: false,
       message: "File upload failed",
@@ -42,8 +26,41 @@ export const generatePdfSummary = async (uploadResponse: UploadRes) => {
   }
 
   try {
-    const pdfText = await fetchNExtractPdfTxt(pdfUrl);
+    const pdfText = await fetchNExtractPdfTxt(fileUrl);
 
+    if (!pdfText) {
+      return {
+        success: false,
+        message: "Failed to fetch and extract pdf text.",
+        data: null,
+      };
+    }
+
+    return {
+      success: true,
+      message: "Pdf text extracted",
+      data: { pdfText },
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      success: false,
+      message: "Failed to fetch and extract pdf text.",
+      data: null,
+    };
+  }
+};
+
+// export const
+
+export const generatePdfSummary = async ({
+  pdfText,
+  fileName,
+}: {
+  pdfText: string;
+  fileName: string;
+}) => {
+  try {
     let summary;
 
     try {
@@ -70,12 +87,10 @@ export const generatePdfSummary = async (uploadResponse: UploadRes) => {
       };
     }
 
-    const fileTitle = formatFileNameAsTitle(fileName);
-
     return {
       success: true,
       message: "Summary generated",
-      data: { title: fileTitle, summary },
+      data: { title: fileName, summary },
     };
   } catch (error) {
     console.log(error);

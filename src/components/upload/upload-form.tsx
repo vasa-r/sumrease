@@ -5,9 +5,11 @@ import UploadFormInput from "@/components/upload/upload-form-input";
 import { fileSchema } from "@/validation/file-schema";
 import { useUploadThing } from "@/utils/uploadthing";
 import toast from "react-hot-toast";
-import { generatePdfSummary } from "@/actions/upload-action";
+import { generatePdfSummary, generatePdfText } from "@/actions/upload-action";
 import { storePdfSummaryAction } from "@/lib/db";
 import { useRouter } from "next/navigation";
+import LoadingSkeleton from "./loading-skeleton";
+import { formatFileNameAsTitle } from "@/utils/format-utils";
 
 const UploadForm = () => {
   const formRef = useRef<HTMLFormElement>(null);
@@ -49,30 +51,50 @@ const UploadForm = () => {
         return;
       }
 
+      let storeResult;
+
+      const fileTitle = formatFileNameAsTitle(file.name);
+
+      const uploadFileUrl = res[0].serverData.file.url;
+
+      console.log({ uploadFileUrl });
+
       toast.success("Processing PDF");
 
-      const summaryResult = await generatePdfSummary(res);
+      const pdfText = await generatePdfText({
+        fileUrl: uploadFileUrl,
+      });
 
-      if (!summaryResult.data) {
+      console.log({ pdfText });
+
+      if (!pdfText.success || !pdfText.data?.pdfText) {
+        throw new Error("No pdf text");
+      }
+
+      const summaryResult = await generatePdfSummary({
+        pdfText: pdfText.data.pdfText ?? "",
+        fileName: fileTitle,
+      });
+
+      console.log({ summaryResult });
+
+      const { data = null } = summaryResult || {};
+
+      if (!data) {
         throw new Error("No summary");
       }
 
-      const { data = null } = summaryResult;
-
-      if (data) {
+      if (data.summary) {
         toast.success("Summary generated successfully. Now saving it.");
-        let storeResult;
-        if (data.summary) {
-          storeResult = await storePdfSummaryAction({
-            fileUrl: res[0].serverData.file.url,
-            summary: summaryResult.data.summary,
-            title: summaryResult.data.title,
-            fileName: file.name,
-          });
-          toast.success("Summary Generated");
-          formRef.current?.reset();
-          router.push(`/summaries/${storeResult.data?.id}`);
-        }
+        storeResult = await storePdfSummaryAction({
+          fileUrl: uploadFileUrl,
+          summary: data.summary,
+          title: fileTitle,
+          fileName: file.name,
+        });
+        toast.success("Summary Generated");
+        formRef.current?.reset();
+        router.push(`/summaries/${storeResult.data?.id}`);
       }
     } catch (error) {
       console.error(error);
@@ -113,6 +135,7 @@ const UploadForm = () => {
               </span>
             </div>
           </div>
+          <LoadingSkeleton />
         </>
       )}
     </div>
