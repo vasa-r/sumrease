@@ -6,6 +6,8 @@ import { FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatDate, formatFileName } from "@/utils/format-utils";
 import { PdfSummary } from "../../../types/type";
+import { MotionDiv } from "@/components/common/motion-wrapper";
+import { itemVariants } from "@/utils/motion-animate";
 
 const SummaryHeader = ({
   title,
@@ -45,7 +47,15 @@ const StatusBadge = ({ status }: { status: string }) => {
 
 const SummaryCard = ({ summary }: { summary: PdfSummary }) => {
   return (
-    <div>
+    <MotionDiv
+      variants={itemVariants}
+      initial="hidden"
+      animate="visible"
+      whileHover={{
+        scale: 1.02,
+        transition: { duration: 0.3, ease: "easeOut" },
+      }}
+    >
       <Card className="relative h-full">
         <div className="absolute top-2 right-2">
           <DeleteButton summaryId={summary.id} />
@@ -68,7 +78,7 @@ const SummaryCard = ({ summary }: { summary: PdfSummary }) => {
           </div>
         </Link>
       </Card>
-    </div>
+    </MotionDiv>
   );
 };
 

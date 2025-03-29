@@ -3,23 +3,39 @@ import { pricingPlans, type Pricing } from "@/utils/pricing-plan";
 import { ArrowRight, CheckIcon } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import { MotionDiv } from "../common/motion-wrapper";
+import {
+  containerVariants,
+  itemVariants,
+  listVariant,
+} from "@/utils/motion-animate";
 
 const PriceSection = () => {
   return (
-    <section className="relative overflow-hidden" id="pricing">
+    <MotionDiv
+      variants={containerVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-100px" }}
+      className="relative overflow-hidden"
+      id="pricing"
+    >
       <div className="max-w-5xl px-4 py-12 mx-auto lg:py-24 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-center w-full pb-12">
+        <MotionDiv
+          variants={itemVariants}
+          className="flex items-center justify-center w-full pb-12"
+        >
           <h2 className="mb-8 text-xl font-bold uppercase text-rose-500">
             Pricing
           </h2>
-        </div>
+        </MotionDiv>
         <div className="relative flex flex-col items-center justify-center gap-8 lg:flex-row lg:items-stretch">
           {pricingPlans.map((plan, idx) => (
             <PricingCard key={idx} {...plan} />
           ))}
         </div>
       </div>
-    </section>
+    </MotionDiv>
   );
 };
 
@@ -32,35 +48,50 @@ const PricingCard = ({
   paymentLink,
 }: Pricing) => {
   return (
-    <div className="relative w-full max-w-lg duration-300 hover:scale-105 hover:transition-all">
+    <MotionDiv
+      variants={listVariant}
+      // initial="hidden"
+      // animate="visible"
+      whileHover={{ scale: 1.02 }}
+      className="relative w-full max-w-lg duration-300 hover:scale-105 hover:transition-all"
+    >
       <div
         className={cn(
           "relative flex flex-col h-full gap-4 lg:gap-8 z-10 p-8 border-[1px] border-gray-500/20 rounded-2xl",
           id === "pro" && "border-rose-500 gap-5 border-2"
         )}
       >
-        <div className="flex items-center justify-between gap-4">
+        <MotionDiv
+          variants={listVariant}
+          className="flex items-center justify-between gap-4"
+        >
           <div>
             <p className="text-lg font-bold capitalize lg:text-xl">{name}</p>
             <p className="mt-2 text-base-content/80">{description}</p>
           </div>
-        </div>
-        <div className="flex gap-2">
+        </MotionDiv>
+        <MotionDiv variants={listVariant} className="flex gap-2">
           <p className="text-5xl font-extrabold tracking-tight">$ {price}</p>
           <div className="flex flex-col justify-end mb-[4px]">
             <p className="text-xs font-semibold uppercase">USD</p>
             <p className="text-xs">/month</p>
           </div>
-        </div>
-        <div className="space-y-2.5 leading-relaxed text-base flex-1">
+        </MotionDiv>
+        <MotionDiv
+          variants={listVariant}
+          className="space-y-2.5 leading-relaxed text-base flex-1"
+        >
           {items.map((item, idx) => (
             <li key={idx} className="flex items-center gap-2">
               <CheckIcon size={18} />
               <span>{item}</span>
             </li>
           ))}
-        </div>
-        <div className="flex justify-center w-full space-y-2">
+        </MotionDiv>
+        <MotionDiv
+          variants={listVariant}
+          className="flex justify-center w-full space-y-2"
+        >
           <Link
             href={paymentLink}
             className={cn(
@@ -72,9 +103,9 @@ const PricingCard = ({
           >
             Buy Now <ArrowRight size={18} />
           </Link>
-        </div>
+        </MotionDiv>
       </div>
-    </div>
+    </MotionDiv>
   );
 };
 

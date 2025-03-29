@@ -10,6 +10,12 @@ import React from "react";
 import { PdfSummary } from "../../../../types/type";
 import EmptySummaryState from "@/components/dashboard/empty-summaries";
 import { hasReachedUploadLimit } from "@/lib/user";
+import {
+  MotionDiv,
+  MotionH1,
+  MotionP,
+} from "@/components/common/motion-wrapper";
+import { itemVariants } from "@/utils/motion-animate";
 
 const Dashboard = async () => {
   const user = await currentUser();
@@ -29,32 +35,63 @@ const Dashboard = async () => {
   return (
     <main className="flex-1">
       <BgGradient />
-      <div className="container flex flex-col gap-4 mx-auto">
+      <MotionDiv
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="container flex flex-col gap-4 mx-auto"
+      >
         <div className="px-2 py-12 sm:py-24">
           <div className="flex flex-col items-center justify-between gap-4 mb-8 sm:flex-row">
             <div className="flex flex-col gap-2">
-              <h1 className="text-4xl font-bold tracking-tight text-transparent bg-linear-to-r from-gray-600 to-gray-900 bg-clip-text">
+              <MotionH1
+                variants={itemVariants}
+                initial="hidden"
+                whileInView="visible"
+                className="text-4xl font-bold tracking-tight text-transparent bg-linear-to-r from-gray-600 to-gray-900 bg-clip-text"
+              >
                 Your Summaries
-              </h1>
-              <p className="text-gray-600">
+              </MotionH1>
+              <MotionP
+                variants={itemVariants}
+                initial="hidden"
+                animate="visible"
+                className="text-gray-600"
+              >
                 Transform your PDF&apos;s into concise, actionable insights
-              </p>
+              </MotionP>
             </div>
 
             {!hasReachedLimit && (
-              <Button
-                variant={"link"}
-                className="transition-all duration-200 bg-linear-to-r from-rose-500 to-rose-700 hover:from-rose-600 hover:to-rose-800 hover:scale-105 group hover:no-underline"
+              <MotionDiv
+                variants={itemVariants}
+                initial="hidden"
+                animate="visible"
+                whileHover={{ scale: 1.05 }}
+                className="self-start"
               >
-                <Link href={"/upload"} className="flex items-center text-white">
-                  <Plus className="w-5 h-5 mr-2" />
-                  New Summary
-                </Link>
-              </Button>
+                <Button
+                  variant={"link"}
+                  className="transition-all duration-200 bg-linear-to-r from-rose-500 to-rose-700 hover:from-rose-600 hover:to-rose-800 hover:scale-105 group hover:no-underline"
+                >
+                  <Link
+                    href={"/upload"}
+                    className="flex items-center text-white"
+                  >
+                    <Plus className="w-5 h-5 mr-2" />
+                    New Summary
+                  </Link>
+                </Button>
+              </MotionDiv>
             )}
           </div>
           {hasReachedLimit && (
-            <div className="mb-6">
+            <MotionDiv
+              variants={itemVariants}
+              initial="hidden"
+              animate="visible"
+              className="mb-6"
+            >
               <div className="p-4 border rounded-lg bg-rose-50 border-rose-200 text-rose-800">
                 <p className="text-sm">
                   You&apos;ve reached the limit of {uploadLimit} uploads on the
@@ -69,7 +106,7 @@ const Dashboard = async () => {
                   </Link>
                 </p>
               </div>
-            </div>
+            </MotionDiv>
           )}
           {summaries.length === 0 ? (
             <EmptySummaryState />
@@ -81,7 +118,7 @@ const Dashboard = async () => {
             </div>
           )}
         </div>
-      </div>
+      </MotionDiv>
     </main>
   );
 };

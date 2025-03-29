@@ -4,6 +4,7 @@ import { ExternalLink, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import DownloadSummaryButton from "@/components/summary/download-summary";
+import { MotionDiv } from "@/components/common/motion-wrapper";
 
 const SourceInfo = ({
   file_name: fileName,
@@ -13,7 +14,12 @@ const SourceInfo = ({
   created_at,
 }: Partial<PdfSummary>) => {
   return (
-    <div className="flex flex-col lg:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
+    <MotionDiv
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="flex flex-col lg:flex-row items-center justify-between gap-4 text-sm text-muted-foreground"
+    >
       <div className="flex items-center justify-center gap-2">
         <FileText className="h-4 w-4 text-rose-400" />
         <span>Source: {fileName}</span>
@@ -41,7 +47,7 @@ const SourceInfo = ({
           created_at={created_at}
         />
       </div>
-    </div>
+    </MotionDiv>
   );
 };
 

@@ -6,6 +6,7 @@ import SummaryHeader from "@/components/summary/summary-header";
 import SourceInfo from "@/components/summary/source-info";
 import { FileText } from "lucide-react";
 import SummaryViewer from "@/components/summary/summary-viewer";
+import { MotionDiv } from "@/components/common/motion-wrapper";
 
 interface ISType {
   params: Promise<{ summaryId: string }>;
@@ -34,13 +35,18 @@ const IndividualSummary = async (props: ISType) => {
     <div className="relative isolate min-h-screen w-full bg-linear-to-b from-rose-50/40 to-white overflow-auto">
       <div className="container mx-auto flex flex-col gap-4">
         <div className="px-4 sm:px-6 lg:px-8 py-6 sm:py-12 lg:py-24">
-          <div className="flex flex-col">
+          <MotionDiv
+            className="flex flex-col"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
             <SummaryHeader
               title={title}
               created_at={created_at}
               word_count={word_count}
             />
-          </div>
+          </MotionDiv>
           {file_name && (
             <SourceInfo
               file_name={file_name}
@@ -50,8 +56,18 @@ const IndividualSummary = async (props: ISType) => {
               created_at={created_at}
             />
           )}
-          <div className="relative mt-4 sm:mt-8 lg:mt-16">
-            <div className="relative mt-4 sm:mt-6 lg:mt-16">
+          <MotionDiv
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="relative mt-4 sm:mt-8 lg:mt-16"
+          >
+            <MotionDiv
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="relative mt-4 sm:mt-6 lg:mt-16"
+            >
               <div className="relative p-4 lg:p-8 bg-white/80 backdrop-blur-md rounded-2xl border shadow-xl border-rose-100/30 transition-all hover:shadow-2xl duration-300 hover:bg-white/90 max-w-4xl mx-auto">
                 <div className="absolute inset-0 bg-linear-to-br from-rose-50/50 via-orange-50/30 to-transparent opacity-50 rounded-2xl sm:rounded-3xl" />
 
@@ -64,8 +80,8 @@ const IndividualSummary = async (props: ISType) => {
                   <SummaryViewer summary={summary_text} />
                 </div>
               </div>
-            </div>
-          </div>
+            </MotionDiv>
+          </MotionDiv>
         </div>
       </div>
     </div>
