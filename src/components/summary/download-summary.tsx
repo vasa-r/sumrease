@@ -11,7 +11,6 @@ const DownloadSummaryButton = ({
   file_name,
   created_at,
 }: Partial<PdfSummary>) => {
-  console.log(title);
   const handleDownload = () => {
     const summaryContent = `# ${title}
 Generated Summary

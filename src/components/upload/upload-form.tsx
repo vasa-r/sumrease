@@ -57,15 +57,11 @@ const UploadForm = () => {
 
       const uploadFileUrl = res[0].serverData.file.url;
 
-      console.log({ uploadFileUrl });
-
       toast.success("Processing PDF");
 
       const pdfText = await generatePdfText({
         fileUrl: uploadFileUrl,
       });
-
-      console.log({ pdfText });
 
       if (!pdfText.success || !pdfText.data?.pdfText) {
         throw new Error("No pdf text");
@@ -75,8 +71,6 @@ const UploadForm = () => {
         pdfText: pdfText.data.pdfText ?? "",
         fileName: fileTitle,
       });
-
-      console.log({ summaryResult });
 
       const { data = null } = summaryResult || {};
 

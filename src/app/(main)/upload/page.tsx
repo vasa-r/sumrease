@@ -7,6 +7,8 @@ import { containerVariants } from "@/utils/motion-animate";
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
+export const maxDuration = 60;
+
 const Upload = async () => {
   const user = await currentUser();
   const userId = user?.id;
